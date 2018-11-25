@@ -3,7 +3,7 @@ import os
 import glob
 import matplotlib.pyplot as plt
 
-folders = ["Coaster","Coaster2","Diving","Drive","Game","Landscape","Pacman","Panel","Ride","Sport"]
+folders = ["Coaster2"]#,"Coaster2","Diving","Drive","Game","Landscape","Pacman","Panel","Ride","Sport"]
 
 for f in range(len(folders)):
 
@@ -41,6 +41,8 @@ for f in range(len(folders)):
     # disegno un grafico  x: #frame  y: #percentuale pixel-tiles visti
     for i in range(1800):
         Ygraphpercentage.append ((len(listofset[i]))*192*192/(Xpixel*Ypixel))
+
+    print(sum(Ygraphpercentage)/1800)
 
     plt.plot(Ygraphpercentage)
     plt.axis([0, 1800, 0, 1])
