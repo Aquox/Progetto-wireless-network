@@ -3,7 +3,7 @@ import os
 import glob
 import matplotlib.pyplot as plt
 
-folders = ["Coaster2"]#,"Coaster2","Diving","Drive","Game","Landscape","Pacman","Panel","Ride","Sport"]
+folders = ["Coaster"]#,"Coaster2","Diving","Drive","Game","Landscape","Pacman","Panel","Ride","Sport"]
 
 for f in range(len(folders)):
 
@@ -46,7 +46,7 @@ for f in range(len(folders)):
 
     plt.plot(Ygraphpercentage)
     plt.axis([0, 1800, 0, 1])
-    plt.title("Percentuale di tiles visualizzati per frame")
+    plt.title("Percentuale di visualizzaione per frame")
     plt.xlabel("# Frame")
     plt.ylabel("# % visualizzato")
     fig = plt.gcf()
@@ -61,7 +61,7 @@ for f in range(len(folders)):
 
     plt.plot(Ygraphmoregranularity)
     plt.axis([0, 60, 0, 1])
-    plt.title("Percentuale di tiles visualizzati per secondo")
+    plt.title("Percentuale di visualizzaione per secondo")
     plt.xlabel("# Secondi")
     plt.ylabel("# % visualizzato")
     fig = plt.gcf()
