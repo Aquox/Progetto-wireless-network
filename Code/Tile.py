@@ -3,7 +3,7 @@ import os
 import glob
 import matplotlib.pyplot as plt
 
-folders = ["Coaster"]#,"Coaster2","Diving","Drive","Game","Landscape","Pacman","Panel","Ride","Sport"]
+folders = ["Coaster","Coaster2","Diving","Drive","Game","Landscape","Pacman","Panel","Ride","Sport"]
 
 for f in range(len(folders)):
 
@@ -42,13 +42,11 @@ for f in range(len(folders)):
     for i in range(1800):
         Ygraphpercentage.append ((len(listofset[i]))*192*192/(Xpixel*Ypixel))
 
-    print(sum(Ygraphpercentage)/1800)
-
     plt.plot(Ygraphpercentage)
     plt.axis([0, 1800, 0, 1])
-    plt.title("Percentuale di visualizzaione per frame")
+    plt.title("Percentuale di visualizzazione per frame")
     plt.xlabel("# Frame")
-    plt.ylabel("# % visualizzato")
+    plt.ylabel("% visualizzato")
     fig = plt.gcf()
     fig.set_size_inches(21, 9)
     fig.savefig("./../Output/"+folders[f]+"/TilesPercentuale.png", dpi=100)
@@ -61,13 +59,19 @@ for f in range(len(folders)):
 
     plt.plot(Ygraphmoregranularity)
     plt.axis([0, 60, 0, 1])
-    plt.title("Percentuale di visualizzaione per secondo")
+    plt.title("Percentuale di visualizzazione per secondo")
     plt.xlabel("# Secondi")
-    plt.ylabel("# % visualizzato")
+    plt.ylabel("% visualizzato")
     fig = plt.gcf()
     fig.set_size_inches(21, 9)
     fig.savefig("./../Output/"+folders[f]+"/TilesPercentualeGranularitàMaggiore.png", dpi=100)
     plt.close('all')
+
+    # Salvo su un file di testo la percentuale totale
+    text_file = open("./../Output/" + folders[f] + "/TilesPercentuale.txt", "w")
+    text_file.write(str(sum(Ygraphpercentage) / 1800))
+    text_file.close()
+
 
     #  creo il file con numero di frame, percentuale di visione del frame e i tiles visti, l'ultima riga è il totale di
     #  tiles visti nell'insieme del video.

@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 
-folders = ["Coaster","Coaster2"]#,"Diving","Drive","Game","Landscape","Pacman","Panel","Ride","Sport"]
+folders = ["Coaster","Coaster2","Diving","Drive","Game","Landscape","Pacman","Panel","Ride","Sport"]
 
 for f in range(len(folders)):
 
@@ -76,6 +76,8 @@ for f in range(len(folders)):
     coordToPixelY = 180/Ypixel
     pixelFrames = []
 
+    # Variabile di supporto per il baricentro x,y [0,1] ; le distanze da esso [2,52]
+    coordBaricentro = np.zeros((1800,52))
 
     # Ciclo per ogni frame per ricavare le varie immagini e i vari dati
     for j in range(1800):
@@ -192,6 +194,17 @@ for f in range(len(folders)):
             #     if ytoPixel+int(fovYpixel/2)-l >=0 and ytoPixel-int(fovYpixel/2)-l <=Ypixel:
             #         MatrixRealFrame[0:Xpixel, ytoPixel + int(fovYpixel / 2) - l - 1:ytoPixel + int(fovYpixel / 2) - l] = np.sum([MatrixRealFrame[0:Xpixel, ytoPixel + int(fovYpixel/2) - l - 1:ytoPixel + int(fovYpixel/2) - l ], np.roll(MatrixPixels[0:Xpixel,ytoPixel+int(fovYpixel/2)-l -1:ytoPixel+int(fovYpixel/2)-l],int(Xpixel/2) + xtoPixel)], axis=0, dtype='bool')
 
+        # Calcolo il baricentro e le distanze dei punti dal baricentro
+
+        xBari = sum(coordX)/50
+        yBari = sum(coordY)/50
+        coordBaricentro[j,0] = xBari
+        coordBaricentro[j,1] = yBari
+        for l in range (2,52):
+            # sqrt ( (x2-x1)^2 + (y2-x1)^2 )
+            coordBaricentro[j,l] = np.sqrt((xBari-coordX[l-2])**2 + (yBari-coordY[l-2])**2)
+
+
         # Disegno il grafico per un frame e salvo l'immagine
         pixelFrames.append(np.count_nonzero(MatrixRealFrame == 1))
         fig, ax = plt.subplots()
@@ -204,6 +217,7 @@ for f in range(len(folders)):
         ax.spines['bottom'].set_visible(False)
         ax.spines['left'].set_visible(False)
         plt.plot(coordX, coordY, 'ro')
+        plt.plot([xBari], [yBari], marker='o', color="green")
         plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
         plt.margins(0, 0)
         plt.gca().xaxis.set_major_locator(plt.NullLocator())
@@ -230,7 +244,7 @@ for f in range(len(folders)):
     plt.axis([0, 1800, 0, 1])
     plt.title("Percentuale di visualizzazione per frame")
     plt.xlabel("# Frame")
-    plt.ylabel("# % visualizzato")
+    plt.ylabel("% visualizzato")
     fig = plt.gcf()
     fig.set_size_inches(21, 9)
     fig.savefig("./../Output/"+folders[f]+"/3DPercentuale.png", dpi=100)
@@ -241,10 +255,10 @@ for f in range(len(folders)):
     for i in range(60):
         Ygraphmoregranularity.append(sum(Ygraphpercentage[i*30:i*30+30])/30)
     plt.plot(Ygraphmoregranularity)
-    plt.axis([0, 1800, 0, 1])
+    plt.axis([0, 60, 0, 1])
     plt.title("Percentuale di visualizzazione per secondo")
     plt.xlabel("# Secondi")
-    plt.ylabel("# % visualizzato")
+    plt.ylabel("% visualizzato")
     fig = plt.gcf()
     fig.set_size_inches(21, 9)
     fig.savefig("./../Output/"+folders[f]+"/3DPercentualeGranularitàMaggiore.png", dpi=100)
@@ -257,9 +271,20 @@ for f in range(len(folders)):
     height, width, layers = frame.shape
     video = cv2.VideoWriter("./../Output/"+folders[f]+"/frame.mp4", cv2.VideoWriter_fourcc(*'MP4V'), 30,(width,height))
     for image in images:
-        video.write(cv2.imread(os.path.join("./../Output/"+folders[f], image)))
+        video.write(cv2.imread(os.path.join("./../Output/"+folders[f]+"/Frame", image)))
     cv2.destroyAllWindows()
     video.release()
 
     # Salvo su un file di testo la percentuale totale
-    # print(sum(Ygraphpercentage)/1800)
+    text_file = open("./../Output/"+folders[f]+"/3DPercentuale.txt", "w")
+    text_file.write(str(sum(Ygraphpercentage)/1800))
+    text_file.close()
+
+    # Calcolo le distanze totali dei punti dai loro baricentri per utente
+    text_file = open("./../Output/" + folders[f] + "/3DDistances.txt", "w")
+    for i in range(50):
+        summation = 0
+        for j in range (1800):
+            summmation = summation + coordBaricentro [j,i+2]
+        text_file.write(str(summmation)+ "\n")
+    text_file.close()
