@@ -3,6 +3,7 @@ import os
 import glob
 import matplotlib.pyplot as plt
 
+sizes = [153,160,114,117,138,126,50,60,149,51]
 folders = ["Coaster","Coaster2","Diving","Drive","Game","Landscape","Pacman","Panel","Ride","Sport"]
 
 for f in range(len(folders)):
@@ -33,8 +34,8 @@ for f in range(len(folders)):
 
 
 
-    Xpixel = 3600
-    Ypixel = 2048
+    Xpixel = 3840
+    Ypixel = 1920
     Ygraphpercentage = []
     Ygraphmoregranularity = []
 
@@ -90,6 +91,10 @@ for f in range(len(folders)):
         wr.writerow(["Totale in percentuale " + str(totale/(1800*200))])
 
 
+    # Calcolo il risparmio di spazio
+    text_file = open("./../Output/" + folders[f] + "/TilesDimensionSave.txt", "w")
+    text_file.write("%0.2f" % ((sum(Ygraphpercentage) / 1800) * sizes[f]) + " / " + str(sizes[f]))
+    text_file.close()
 
 
 # print (y)
