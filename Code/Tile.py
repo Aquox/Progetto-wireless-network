@@ -50,7 +50,7 @@ for f in range(len(folders)):
     plt.ylabel("% visualizzato")
     fig = plt.gcf()
     fig.set_size_inches(21, 9)
-    fig.savefig("./../Output/"+folders[f]+"/TilesPercentuale.png", dpi=100)
+    fig.savefig("./../Output/"+folders[f]+"/"+folders[f]+"_Tiles_Percentuale-In-Aria-Per-Frame.png", dpi=100)
     plt.close('all')
 
     # disegno un grafico a granularità maggiore raggruppando i frame di un secondo (30)
@@ -65,11 +65,11 @@ for f in range(len(folders)):
     plt.ylabel("% visualizzato")
     fig = plt.gcf()
     fig.set_size_inches(21, 9)
-    fig.savefig("./../Output/"+folders[f]+"/TilesPercentualeGranularitàMaggiore.png", dpi=100)
+    fig.savefig("./../Output/"+folders[f]+"/"+folders[f]+"_Tiles_Percentuale-In-Aria-Per-Secondo.png", dpi=100)
     plt.close('all')
 
     # Salvo su un file di testo la percentuale totale
-    text_file = open("./../Output/" + folders[f] + "/TilesPercentuale.txt", "w")
+    text_file = open("./../Output/" + folders[f] +"/"+folders[f]+"_Tiles_Percentuale-Utilizzo-Totale.txt", "w")
     text_file.write(str(sum(Ygraphpercentage) / 1800))
     text_file.close()
 
@@ -78,7 +78,7 @@ for f in range(len(folders)):
     #  tiles visti nell'insieme del video.
     #  La percentuale non è valida se i tiles per frame sono diversi da 200 in totale.
 
-    with open("./../Output/"+folders[f]+"/TilesVistiFrame.csv", 'w', newline='') as filecsv:
+    with open("./../Output/"+folders[f]+"/"+folders[f]+"_Tiles_Totale-Visti-Per-Frame.csv", 'w', newline='') as filecsv:
         wr = csv.writer(filecsv)
         wr.writerow(["frame","% tiles visti","tiles"])
         totale = 0
@@ -92,7 +92,7 @@ for f in range(len(folders)):
 
 
     # Calcolo il risparmio di spazio
-    text_file = open("./../Output/" + folders[f] + "/TilesDimensionSave.txt", "w")
+    text_file = open("./../Output/" + folders[f] +"/"+folders[f]+"_Tiles_DimensionSave.txt", "w")
     text_file.write("%0.2f" % ((sum(Ygraphpercentage) / 1800) * sizes[f]) + " / " + str(sizes[f]))
     text_file.close()
 
